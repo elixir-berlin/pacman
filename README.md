@@ -18,6 +18,8 @@ Pacman finds himself in a grid filled with monsters.
 
 Oh no!
 
+![](http://s16.postimg.org/l9ij2ctht/ghost.jpg)
+
 Will he be able to eat all the dots on the board before the monsters eat him?
 
 For this challnege we are concern with the transformations required on a board state and 
