@@ -34,7 +34,7 @@ Here is a guideline for what the game needs:
  * pacman moves on each tick
  * user can rotate pacman
  * pacman eats dots
- * pacman wraps around 
+ * pacman wraps around
  * pacman stops on wall
  * pacman will not rotate into a wall
  * game score (levels completed, number of dots eaten in this level)
