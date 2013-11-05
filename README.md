@@ -11,7 +11,12 @@ Elixir Berlin meetup: 05/11/2013.
 Pacman finds himself in a grid filled with monsters. 
 Will he be able to eat all the dots on the board before the monsters eat him?
 
-Incomplete list of things the game needs:
+For this challnege we are concern with the transformations required on a board state and 
+less on the pretty graphics or user interaction.
+
+This problem can be taken as far as you would like. Don't expect to complete everything.
+
+Here is a guideline for what the game needs:
 
  * pacman is on a grid filled with dots
  * pacman has a direction
@@ -27,6 +32,8 @@ Incomplete list of things the game needs:
  * animate pacman eating (mouth opens and closes)
 
 ## Questions.
+
+Some questions and thoughts to get you started.
 
 1. How do we represent the grid?
 2. How do we indicate where pacman is?
