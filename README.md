@@ -1,6 +1,7 @@
 # Pacman
 
 Goal: Understanding better functional programming.
+
 Elixir Berlin meetup: 05/11/2013.
 
 ![](http://www.wired.com/images/article/full/2008/07/pacman_500px.jpg)
