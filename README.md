@@ -22,7 +22,7 @@ Oh no!
 
 Will he be able to eat all the dots on the board before the monsters eat him?
 
-For this challnege we are concern with the transformations required on a board state and 
+For this challenge we are concerned with the transformations required on a board state and 
 less on the pretty graphics or user interaction.
 
 This problem can be taken as far as you would like. Don't expect to complete everything.
