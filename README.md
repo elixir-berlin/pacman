@@ -22,7 +22,7 @@ Oh no!
 
 Will he be able to eat all the dots on the board before the monsters eat him?
 
-For this challnege we are concern with the transformations required on a board state and 
+For this challenge we are concerned with the transformations required on a board state and 
 less on the pretty graphics or user interaction.
 
 This problem can be taken as far as you would like. Don't expect to complete everything.
@@ -34,7 +34,7 @@ Here is a guideline for what the game needs:
  * pacman moves on each tick
  * user can rotate pacman
  * pacman eats dots
- * pacman wraps around 
+ * pacman wraps around
  * pacman stops on wall
  * pacman will not rotate into a wall
  * game score (levels completed, number of dots eaten in this level)
