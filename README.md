@@ -1,10 +1,11 @@
 # Pacman
 
-Elixir Berlin meetup kata challenge 05/11/2013
+Goal: Understanding better functional programming.
+Elixir Berlin meetup: 05/11/2013.
 
 ![](http://www.wired.com/images/article/full/2008/07/pacman_500px.jpg)
 
-## Challenge
+## ACSII Pacman Challenge
 
 Pacman finds himself in a grid filled with monsters. 
 Will he be able to eat all the dots on the board before the monsters eat him?
@@ -23,3 +24,10 @@ Incomplete list of things the game needs:
  * monsters...
  * levels
  * animate pacman eating (mouth opens and closes)
+
+## Questions.
+
+1. How do we represent the grid?
+2. How do we indicate where pacman is?
+3. How do we indicate where dots are?
+4. How does pacman eat dots.
