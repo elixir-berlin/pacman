@@ -6,9 +6,12 @@ Elixir Berlin meetup: 05/11/2013.
 
 ![](http://www.wired.com/images/article/full/2008/07/pacman_500px.jpg)
 
-## ACSII Pacman Challenge
+## ASCII Pacman Challenge
 
-Pacman finds himself in a grid filled with monsters. 
+Pacman finds himself in a grid filled with monsters.
+
+Oh no!
+
 Will he be able to eat all the dots on the board before the monsters eat him?
 
 For this challnege we are concern with the transformations required on a board state and 
