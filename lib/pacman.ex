@@ -1,0 +1,2 @@
+defmodule Pacman do
+end
