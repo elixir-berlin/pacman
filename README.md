@@ -6,6 +6,12 @@ Elixir Berlin meetup: 05/11/2013.
 
 ![](http://www.wired.com/images/article/full/2008/07/pacman_500px.jpg)
 
+## Getting started.
+
+1. Fork this project.
+2. Create a branch with your name.
+3. Once happy submit a pull request.
+
 ## ASCII Pacman Challenge
 
 Pacman finds himself in a grid filled with monsters.
