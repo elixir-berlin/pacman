@@ -4,7 +4,7 @@ defmodule Pacman.Mixfile do
   def project do
     [ app: :pacman,
       version: "0.0.1",
-      elixir: "~> 0.10.1",
+      elixir: "~> 0.11.2",
       deps: deps ]
   end
 
