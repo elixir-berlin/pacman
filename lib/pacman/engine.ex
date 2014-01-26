@@ -26,7 +26,7 @@ defmodule Pacman.Engine do
 	@doc "this ensures we process just
 		    one shared event per cycle in a non-blocking fashion"
 	def fetch_event do
-		:events <- :pop_event
+		send :events, :pop_event
 		receive do
 			{:event, event} -> event
 		after

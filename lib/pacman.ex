@@ -24,7 +24,7 @@ Pacman.add :name # adds a player to the grid
 Pacman.turn :down, :name # changes direction of :name Pacman
 """
 
-	def boot do
+  def boot do
     event_loop_pid = spawn_link(Pacman.SharedEvents, :events_loop, [])
 		Process.register event_loop_pid, :events
 		engine_pid = spawn_link(Pacman.Engine, :main, [])
@@ -34,11 +34,11 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 	end
 
 	def event(event) do
-		:events <- {:queue_event, event}
+		send :events, {:queue_event, event}
 	end
 
 	def turn(direction, pacman // :default) do
-		pacman <- {:turn, direction}
+		send pacman, {:turn, direction}
 	end
 
 	def add(name) do
@@ -48,7 +48,7 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 	# NOTE: what happens to linked children if parent crashes/is killed? 
 	#       could we just kill the parent?
 	def exit do
-		:engine <- :quit
-		:events <- :quit
+		send :engine, :quit
+		send :events, :quit
 	end
 end

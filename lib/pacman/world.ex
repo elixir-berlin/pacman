@@ -61,7 +61,7 @@ or maybe something like @impl
 	
 	@doc "again a 'synchronous call' to ask the direction to the user's process which falls back to the old direction"
 	def ask_direction(name, old_dir) do
-		name <- :fetch_direction
+		send name, :fetch_direction
 		receive do
 			{:new_direction, dir} -> translate_direction(dir) 
 		after

@@ -14,7 +14,7 @@ defmodule Pacman.SharedEvents do
 
 			:pop_event when length(events_queue) > 0 ->
 				[event | rest] = events_queue
-				:engine <- {:event, event}
+				send :engine, {:event, event}
 				events_loop(rest)
 		end
 	end

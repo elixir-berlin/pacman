@@ -7,7 +7,7 @@ defmodule Pacman.UserEvents do
 	def events_loop(name, state // State.new) do
 		receive do
 			:fetch_direction ->
-				:engine <- {:new_direction, state.direction}
+				send :engine, {:new_direction, state.direction}
 			  events_loop name, state
 			{:turn, direction} ->
 				events_loop name, state.update(direction: direction)
