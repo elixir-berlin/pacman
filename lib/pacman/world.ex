@@ -82,10 +82,12 @@ or maybe something like @impl
 	@doc "a Grid's instantaneous representation"
 	def represent(Grid[] = grid) do
 		represent_one = fn({name, pcm}) ->
-												"#{name}: #{inspect(pcm.position)} -- score: #{pcm.score}"
+												# "#{name}: #{inspect(pcm.position)} -- score: #{pcm.score}"
+												{x, y} = pcm.position
+												[name: name, position: [x: x, y: y]]
 										end
-		representation = Enum.map_join(grid.pacmans, "\n", represent_one)
-		# IO.puts(representation)
-		representation
+		representation = Enum.map(grid.pacmans, represent_one)
+		{:ok, json_str} = JSON.encode representation
+		json_str
 	end
 end
