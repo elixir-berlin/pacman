@@ -25,16 +25,13 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 """
 
   def boot do
-    event_loop_pid = spawn_link(Pacman.SharedEvents, :events_loop, [])
-		Process.register event_loop_pid, :events
 		engine_pid = spawn_link(Pacman.Engine, :main, [])
 		Process.register engine_pid, :engine
 		add :default
-		IO.puts "started"
 	end
 
 	def event(event) do
-		send :events, {:queue_event, event}
+		send :engine, {:event, event}
 	end
 
 	def turn(direction, pacman // :default) do
@@ -45,10 +42,25 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 		event [type: :register_pacman, name: name]
 	end
 
-	# NOTE: what happens to linked children if parent crashes/is killed? 
-	#       could we just kill the parent?
+	def stream do
+		Process.register self, :stream
+		next = fn() ->
+							 # NOTE: we might need to ask each time
+							 #       for state as Stream should be lazily iterated
+							 event [type: :fetch_state]
+							 receive do
+								 {:grid_state, state} ->
+									 state
+							 end
+					 end
+		Stream.repeatedly(next)
+	end
+
+	def streaming fun do
+		stream |> Enum.each(fun)
+	end
+
 	def exit do
 		send :engine, :quit
-		send :events, :quit
 	end
 end

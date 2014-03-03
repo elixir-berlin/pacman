@@ -16,14 +16,14 @@ Stores 'Class instance variables':
 - @directions human -> vector translations
 
 ### NOTE
-  
+
 World should rather implement a protocol for the Grid
 in the sense of http://elixir-lang.org/getting_started/4.html
 or maybe something like @impl
 """
-	
+
 	defrecord Grid, pacmans: HashDict.new, food: [], phantoms: []
-	defrecord Pacman, direction: {1,0}, position: {div(@size, 2), div(@size, 2)}, score: 0 
+	defrecord Pacman, direction: {1,0}, position: {div(@size, 2), div(@size, 2)}, score: 0
 
 	def new do
 		Grid.new
@@ -58,14 +58,14 @@ or maybe something like @impl
 				{name, new_pcm}
 		end
 	end
-	
+
 	@doc "again a 'synchronous call' to ask the direction to the user's process which falls back to the old direction"
 	def ask_direction(name, old_dir) do
 		send name, :fetch_direction
 		receive do
-			{:new_direction, dir} -> translate_direction(dir) 
+			{:new_direction, dir} -> translate_direction(dir)
 		after
-			0 -> 
+			0 ->
 				IO.puts "missed!"
 				old_dir
 		end
@@ -78,12 +78,14 @@ or maybe something like @impl
 	def wrap_position(value, delta) do
 		rem(@size + value + delta, @size)
 	end
-							
+
 	@doc "a Grid's instantaneous representation"
 	def represent(Grid[] = grid) do
 		represent_one = fn({name, pcm}) ->
 												"#{name}: #{inspect(pcm.position)} -- score: #{pcm.score}"
 										end
-		IO.puts(Enum.map_join(grid.pacmans, "\n", represent_one))
+		representation = Enum.map_join(grid.pacmans, "\n", represent_one)
+		# IO.puts(representation)
+		representation
 	end
 end
