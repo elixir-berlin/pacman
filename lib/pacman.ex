@@ -25,16 +25,19 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 """
 
   def boot do
-		engine_pid = spawn_link(Pacman.Engine, :main, [])
+		engine_pid = spawn_link(Pacman.Engine, :main, [Pacman.World.new, []])
 		Process.register engine_pid, :engine
-		add :default
+	end
+
+	def register_output pid do
+		event [type: :register_output, pid: pid]
 	end
 
 	def event(event) do
 		send :engine, {:event, event}
 	end
 
-	def turn(direction, pacman // :default) do
+	def turn(pacman, direction) do
 		send pacman, {:turn, direction}
 	end
 
@@ -43,6 +46,9 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 	end
 
 	def stream do
+		# NOTE: wherever I call Pacman.stream from
+		#       in this way I am sure to targer the
+		#       right home process
 		Process.register self, :stream
 		next = fn() ->
 							 # NOTE: we might need to ask each time

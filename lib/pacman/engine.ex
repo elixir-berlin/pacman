@@ -1,16 +1,21 @@
 defmodule Pacman.Engine do
 
 	@doc "the main animation loop changes states of the pacman's world"
-	def main(world // Pacman.World.new) do
+	def main(world, outs) do
 		catch_exit
 		event = fetch_event
-		world = react_on_event(world, event)
+		{world, outs} = react_on_event(world, outs, event)
 		world = Pacman.World.move_pacmans(world)
-		representation = Pacman.World.represent(world)
+		# representation = Pacman.World.represent(world)
 		# IO.puts representation
 		# send :stream, representation
-		:timer.sleep 500
-		main(world)
+		outs |> Enum.each fn(out)-> send_state(out, world) end
+		:timer.sleep 1000
+		main(world, outs)
+	end
+
+	def send_state(out, world) do
+		send out, {:state, Pacman.World.represent(world)}
 	end
 
 	def catch_exit do
@@ -32,22 +37,29 @@ defmodule Pacman.Engine do
 		end
 	end
 
+	@doc "adds an output channel"
+	def react_on_event(world, outs, [type: :register_output, pid: pid]) do
+		outs = List.insert_at outs, 0, pid
+		{world, outs}
+	end
+
 	@doc "changes the world's state based on incoming shared event"
-	def react_on_event(world, [type: :register_pacman, name: name]) do
-	  Pacman.World.register_pacman(world, name)
+	def react_on_event(world, outs, [type: :register_pacman, name: name]) do
+	  world = Pacman.World.register_pacman(world, name)
+		{world, outs}
 	end
 
-	def react_on_event(world, [type: :fetch_state]) do
+	def react_on_event(world, outs, [type: :fetch_state]) do
 		send :stream, {:grid_state, Pacman.World.represent(world)}
-		world
+		{world, outs}
 	end
 
-	def react_on_event(world, [type: :dump_state]) do
+	def react_on_event(world, outs, [type: :dump_state]) do
 		IO.puts Pacman.World.represent(world)
-		world
+		{world, outs}
 	end
 
-	def react_on_event(world, _) do
-		world
+	def react_on_event(world, outs, _) do
+		{world, outs}
 	end
 end
