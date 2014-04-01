@@ -1,14 +1,11 @@
 defmodule Pacman.Engine do
 
 	@doc "the main animation loop changes states of the pacman's world"
-	def main(world, outs) do
+  def main(world, outs) do
 		catch_exit
 		event = fetch_event
 		{world, outs} = react_on_event(world, outs, event)
 		world = Pacman.World.move_pacmans(world)
-		# representation = Pacman.World.represent(world)
-		# IO.puts representation
-		# send :stream, representation
 		outs |> Enum.each fn(out)-> send_state(out, world) end
 		:timer.sleep 1000
 		main(world, outs)
@@ -43,14 +40,9 @@ defmodule Pacman.Engine do
 		{world, outs}
 	end
 
-	@doc "changes the world's state based on incoming shared event"
+	@doc "changes the world's state based on incoming event"
 	def react_on_event(world, outs, [type: :register_pacman, name: name]) do
 	  world = Pacman.World.register_pacman(world, name)
-		{world, outs}
-	end
-
-	def react_on_event(world, outs, [type: :fetch_state]) do
-		send :stream, {:grid_state, Pacman.World.represent(world)}
 		{world, outs}
 	end
 

@@ -23,22 +23,21 @@ or maybe something like @impl
 """
 
 	defrecord Grid, pacmans: HashDict.new, food: [], phantoms: []
-	defrecord Pacman, direction: {1,0}, position: {div(@size, 2), div(@size, 2)}, score: 0
+	defrecord User, direction: {1,0}, position: {div(@size, 2), div(@size, 2)}, score: 0
 
 	def new do
 		Grid.new
 	end
 
 	def spawn_user_events(name) do
-		# FIXME: why do I need to namespace from root?
-		pid = spawn_link(Elixir.Pacman.UserEvents, :events_loop, [name])
+		pid = spawn_link(Pacman.UserEvents, :events_loop, [name])
 		Process.register pid, name
 	end
 
 	@doc "register a new pacman user process under its name and updates the grid"
 	def register_pacman(Grid[] = grid, name) do
 		pacmans = grid.pacmans
-		pacmans = HashDict.put_new pacmans, name, Pacman.new
+		pacmans = HashDict.put_new pacmans, name, User.new
 		spawn_user_events(name)
 		grid.update(pacmans: pacmans)
 	end
@@ -49,13 +48,13 @@ or maybe something like @impl
 
 	def displace do
 		fn({name, pcm}) ->
-				{dx, dy} = ask_direction(name, pcm.direction)
-				{x, y}  = pcm.position
-				new_x = wrap_position(x, dx)
-				new_y = wrap_position(y, dy)
-				new_position = {new_x, new_y}
-				new_pcm = pcm.update(position: new_position)
-				{name, new_pcm}
+			{dx, dy} = ask_direction(name, pcm.direction)
+			{x, y}  = pcm.position
+			new_x = wrap_position(x, dx)
+			new_y = wrap_position(y, dy)
+			new_position = {new_x, new_y}
+			new_pcm = pcm.update(position: new_position)
+		  {name, new_pcm}
 		end
 	end
 
@@ -66,8 +65,8 @@ or maybe something like @impl
 			{:new_direction, dir} -> translate_direction(dir)
 		after
 			0 ->
-				IO.puts "missed!"
-				old_dir
+			  IO.puts "missed!"
+			  old_dir
 		end
 	end
 
@@ -82,9 +81,8 @@ or maybe something like @impl
 	@doc "a Grid's instantaneous representation"
 	def represent(Grid[] = grid) do
 		represent_one = fn({name, pcm}) ->
-												# "#{name}: #{inspect(pcm.position)} -- score: #{pcm.score}"
-												{x, y} = pcm.position
-												[name: name, position: [x: x, y: y]]
+											{x, y} = pcm.position
+											[name: name, position: [x: x, y: y]]
 										end
 		representation = Enum.map(grid.pacmans, represent_one)
 		{:ok, json_str} = JSON.encode representation

@@ -1,6 +1,3 @@
-require Pacman.SharedEvents # ? just the first is required to mix
-# require Pacman.Engine
-
 defmodule Pacman do
 	@moduledoc """
 
@@ -33,10 +30,6 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 		event [type: :register_output, pid: pid]
 	end
 
-	def event(event) do
-		send :engine, {:event, event}
-	end
-
 	def turn(pacman, direction) do
 		send pacman, {:turn, direction}
 	end
@@ -45,25 +38,8 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 		event [type: :register_pacman, name: name]
 	end
 
-	def stream do
-		# NOTE: wherever I call Pacman.stream from
-		#       in this way I am sure to targer the
-		#       right home process
-		Process.register self, :stream
-		next = fn() ->
-							 # NOTE: we might need to ask each time
-							 #       for state as Stream should be lazily iterated
-							 event [type: :fetch_state]
-							 receive do
-								 {:grid_state, state} ->
-									 state
-							 end
-					 end
-		Stream.repeatedly(next)
-	end
-
-	def streaming fun do
-		stream |> Enum.each(fun)
+	def event(event) do
+		send :engine, {:event, event}
 	end
 
 	def exit do
