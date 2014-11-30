@@ -1,5 +1,5 @@
 defmodule Pacman do
-	@moduledoc """
+  @moduledoc """
 
 ## Pacman Module
 
@@ -22,27 +22,43 @@ Pacman.turn :down, :name # changes direction of :name Pacman
 """
 
   def boot do
-		engine_pid = spawn_link(Pacman.Engine, :main, [Pacman.World.new, []])
-		Process.register engine_pid, :engine
-	end
+    engine_pid = spawn_link(Pacman.Engine, :main, [Pacman.World.new, []])
+    Process.register engine_pid, :engine
+  end
 
-	def register_output pid do
-		event [type: :register_output, pid: pid]
-	end
+  def register_output pid do
+    event [type: :register_output, pid: pid]
+  end
 
-	def turn(pacman, direction) do
-		send pacman, {:turn, direction}
-	end
+  def turn(pacman, direction) do
+    send pacman, {:turn, direction}
+  end
 
-	def add(name) do
-		event [type: :register_pacman, name: name]
-	end
+  def add(name) do
+    event [type: :register_pacman, name: name]
+  end
 
-	def event(event) do
-		send :engine, {:event, event}
-	end
+  def event(event) do
+    send :engine, {:event, event}
+  end
 
-	def exit do
-		send :engine, :quit
-	end
+  def exit do
+    send :engine, :quit
+  end
+
+  defmodule StdOut do
+    def write do
+      receive do
+        {:state, json}->
+          IO.puts inspect(json)
+          write
+      end
+    end
+  end
+
+  def log do
+    log_pid = spawn StdOut, :write, []
+    register_output log_pid
+  end
+
 end

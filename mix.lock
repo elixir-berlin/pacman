@@ -1,1 +1,1 @@
-[ "json": {:git, "git://github.com/cblage/elixir-json.git", "02ca5d39657049a362f92f87850d9b811742879f", []} ]
+%{"json": {:hex, :json, "0.3.2"}}
