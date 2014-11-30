@@ -40,9 +40,21 @@ defmodule Pacman.Engine do
     {world, outs}
   end
 
+  @doc "removes the specified output channel"
+  def react_on_event(world, outs, [type: :remove_output, pid: pid]) do
+    outs = List.delete outs, pid
+    {world, outs}
+  end
+
   @doc "changes the world's state based on incoming event"
   def react_on_event(world, outs, [type: :register_pacman, name: name]) do
     world = Pacman.World.register_pacman(world, name)
+    {world, outs}
+  end
+
+  @doc "removed named pacman from the World"
+  def react_on_event(world, outs, [type: :remove_pacman, name: name]) do
+    world = Pacman.World.remove_pacman(world, name)
     {world, outs}
   end
 

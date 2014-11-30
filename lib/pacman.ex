@@ -30,12 +30,20 @@ Pacman.turn :down, :name # changes direction of :name Pacman
     event [type: :register_output, pid: pid]
   end
 
+  def remove_output pid do
+    event [type: :remove_output, pid: pid]
+  end
+
   def turn(pacman, direction) do
     send pacman, {:turn, direction}
   end
 
-  def add(name) do
-    event [type: :register_pacman, name: name]
+  def add(id, metadata \\ []) do
+    event [type: :register_pacman, name: id]
+  end
+
+  def remove(name) do
+    event [type: :remove_pacman, name: name]
   end
 
   def event(event) do

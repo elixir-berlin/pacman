@@ -21,11 +21,6 @@ World should rather implement a protocol for the Grid
 in the sense of http://elixir-lang.org/getting_started/4.html
 or maybe something like @impl
 """
-
-  def size do
-    @size
-  end
-
   defmodule Grid do
     defstruct pacmans: HashDict.new,
               food: [],
@@ -63,23 +58,25 @@ or maybe something like @impl
   def register_pacman(%Grid{} = grid, name) do
     new_pacmans = HashDict.put_new grid.pacmans, name, %User{}
     spawn_user_events(name)
-    # %Grid{grid | pacmans: new_pacmans}
-    Grid.replace_pacmans(grid, new_pacmans)
+    Grid.replace_pacmans grid, new_pacmans
   end
 
-  # newpacmans |> Enum.map &displace/2 |> Enum.into(HasDict.new)
+  @doc "removes pacman"
+  def remove_pacman(%Grid{} = grid, name) do
+    new_pacmans = HashDict.delete grid.pacmans, name
+    if name_pid = Process.whereis(name) do
+      IO.puts "exiting PID: #{name}"
+      Process.exit name_pid, :normal
+    end
+    Grid.replace_pacmans grid, new_pacmans
+  end
+
   def move_pacmans(grid) do
     new_pacmans = grid.pacmans |>
       Enum.map(&displace/1) |>
       Enum.into(HashDict.new)
     Grid.replace_pacmans grid, new_pacmans
   end
-
-  # def replace_pacmans(pacmans) do
-  #   Enum.reduce pacmans, HashDict.new, fn({name, user}, memo)->
-  #     HashDict.put memo, name, displace(name, user)
-  #   end
-  # end
 
   def displace({name, pcm}) do
     {dx, dy} = ask_direction(name, pcm.direction)
