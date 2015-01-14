@@ -6,7 +6,7 @@ defmodule Pacman.Engine do
     event = fetch_event
     {world, outs} = react_on_event(world, outs, event)
     world = Pacman.World.move_pacmans(world)
-    outs |> Enum.each fn(out)-> send_state(out, world) end
+    Enum.each outs, &(send_state(&1, world))
     :timer.sleep 200
     main(world, outs)
   end
@@ -15,21 +15,12 @@ defmodule Pacman.Engine do
     send out, {:state, Pacman.World.represent(world)}
   end
 
-  def catch_exit do
-    receive do
-      :quit -> Process.exit(self, :kill)
-    after
-      0 -> "no exit signal"
-    end
-  end
-
   @doc "this ensures we process just
         one shared event per cycle in a non-blocking fashion"
   def fetch_event do
     receive do
       {:event, event} -> event
     after
-      # NOTE: we could even use this as sleep time...
       0 -> nil
     end
   end
@@ -66,4 +57,13 @@ defmodule Pacman.Engine do
   def react_on_event(world, outs, _) do
     {world, outs}
   end
+
+  def catch_exit do
+    receive do
+      :quit -> Process.exit(self, :kill)
+    after
+      0 -> "no exit signal"
+    end
+  end
+
 end

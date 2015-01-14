@@ -38,7 +38,7 @@ Pacman.turn :down, :name # changes direction of :name Pacman
     send pacman, {:turn, direction}
   end
 
-  def add(id, metadata \\ []) do
+  def add(id, _metadata \\ []) do
     event [type: :register_pacman, name: id]
   end
 
